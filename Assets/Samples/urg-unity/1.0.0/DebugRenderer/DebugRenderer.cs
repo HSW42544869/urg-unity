@@ -105,14 +105,20 @@ namespace Urg
 
                 Vector3 worldPos = new Vector3(0, 0, 0);
                 var inRegion = affineConverter.Sensor2WorldPosition(center, out worldPos);
-                if (inRegion && index < debugObjects.Count)
+                if (index >= debugObjects.Count)
                 {
-                    //Gizmos.DrawCube(worldPos, new Vector3(0.1f, 0.1f, 0.1f));
+                    Debug.LogWarning("Index out of range: " + index + " >= " + debugObjects.Count);
+                    continue; // Skip the remaining code in the loop to avoid accessing an invalid index
+                }
+
+                if (inRegion)
+                {
                     debugObjects[index].transform.position = worldPos;
                     index++;
                 }
             }
 
+            // Hide remaining debug objects
             for (var i = index; i < debugObjects.Count; i++)
             {
                 debugObjects[i].transform.position = new Vector3(100, 100, 100);
